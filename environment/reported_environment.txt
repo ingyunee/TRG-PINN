@@ -1,0 +1,13 @@
+Reported numerical environment
+
+Python: 3.10.20
+PyTorch: 2.0.1
+CUDA toolkit used by PyTorch: 11.7
+GPU: NVIDIA GeForce RTX 3090
+NumPy: 1.26.4
+pandas: 2.3.3
+SciPy: 1.15.3
+Matplotlib: 3.10.9
+
+The research server exposed seven RTX 3090 devices. Benchmark parity reports
+preserve the device provenance used for metric and cache reconstruction.

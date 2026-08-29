@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-08-27T02:28:16.368610+00:00",
+  "legacy_project_name": "<LOCAL_PATH_REDACTED>",
+  "full_file_count": 5370,
+  "full_size_bytes": 1243915291,
+  "canonical_file_count": 4916,
+  "canonical_size_bytes": 1179616384,
+  "artifact_manifest_sha256": "9be1884fa7e23af3b496338f4fab2c7de3554a9a6106bcc5010803d57c72c2b3",
+  "note": "Absolute local paths are intentionally omitted from public manifests. The local source root is stored only in build/source_roots.local.json."
+}

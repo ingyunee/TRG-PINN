@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "benchmark": "1d_euler",
+  "public_source_extraction_pass": true,
+  "checkpoint_architecture_pass": true,
+  "checkpoint_parameter_count": 83331,
+  "refactored_metric_parity_pass": true,
+  "refactored_metric_parity_rows": 10,
+  "refactored_metric_max_absolute_difference": 0.0,
+  "cache_parity_pass": true,
+  "cache_report": {
+    "euler1d_multiseed_line_benchmark.npz": {
+      "keys_compared": 20,
+      "max_absolute_difference": 0.0,
+      "status": "PASS"
+    },
+    "euler1d_median_seed_heatmap_benchmark.npz": {
+      "keys_compared": 20,
+      "max_absolute_difference": 0.0,
+      "status": "PASS"
+    }
+  },
+  "current_canonical_rendered_figure_count": 10,
+  "frozen_paper_auxiliary_figure_count": 16,
+  "smoke_test_pass": true,
+  "active_gate_unit_test_pass": true,
+  "active_gate": {
+    "valid_fraction": 1.0,
+    "gate_max": 0.9974379539489746,
+    "active_fraction_gt_0p5": 0.041198499500751495,
+    "minimum_residual_weight": 0.02251080423593521
+  },
+  "reported_artifact_hashes_unchanged": true,
+  "full_manuscript_retraining": false,
+  "status": "PASS"
+}

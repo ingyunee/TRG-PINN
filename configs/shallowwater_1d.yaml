@@ -1,0 +1,126 @@
+# Canonical public configuration for the reported 1D shallow-water benchmark.
+schema_version: 1
+
+benchmark:
+  id: 1d_shallowwater
+  equation: shallow_water
+  problem: stoker_wet_bed_dam_break
+  spatial_dimension: 1
+  primary_metric: state_scaled_space_time_rel_l2
+  final_metric: state_scaled_final_rel_l2
+  reference: exact_stoker_entropy_solution
+
+runtime:
+  device: auto
+  dtype: float32
+
+reported_environment:
+  python: "3.10.20"
+  pytorch: "2.0.1+cu117"
+  cuda: "11.7"
+  gpu: "NVIDIA GeForce RTX 3090"
+
+seeds: [2026, 7, 42, 100, 31415]
+
+problem:
+  x_min: -1.0
+  x_max: 1.0
+  t_min: 0.0
+  t_max: 0.25
+  discontinuity_x0: 0.0
+  gravity: 1.0
+  left_state: [2.0, 0.0]       # [h, q]
+  right_state: [1.0, 0.0]
+  left_boundary_state: [2.0, 0.0]
+  right_boundary_state: [1.0, 0.0]
+
+network:
+  hidden_layers: 6
+  hidden_width: 128
+  activation: tanh
+  direct_output: [h, q]
+  output_dimension: 2
+  depth_floor: 1.0e-5
+  positive_outputs: [h]
+  positive_transform: softplus_plus_floor
+  trainable_parameters: 83202
+
+scaling:
+  state: [2.0, 2.8284271247461903]
+  trace_state: [2.0, 2.8284271247461903]
+  conservative_residual: [2.0, 2.8284271247461903]
+
+training:
+  warmup_iterations: 3000
+  continuation_iterations: 7000
+  total_iterations: 10000
+  resample_collocation_each_iteration: true
+  paired_continuation_rng: true
+  validation_set: false
+  early_stopping: false
+  best_checkpoint_selection: false
+  optimizer:
+    name: AdamW
+    warmup_learning_rate: 8.0e-4
+    continuation_learning_rate: 3.0e-4
+    weight_decay: 1.0e-2
+  scheduler:
+    name: CosineAnnealingLR
+    warmup_eta_min_fraction: 0.05
+    continuation_eta_min_fraction: 0.03
+  gradient_clip_norm: 1.0
+
+sampling:
+  interior_points: 12000
+  initial_points: 1500
+  boundary_points: 1500
+  initial_sampling: balanced_left_right
+  boundary_sampling: balanced_left_right_reservoir_states
+
+loss:
+  initial_weight: 100.0
+  boundary_weight: 30.0
+  pde_weight: 1.0
+
+trg:
+  h0: 0.018257418583505537
+  h_start: 0.091287092917527679
+  h_end: 0.018257418583505537
+  h_min_factor: 1.0
+  h_max_factor: 5.0
+  cmin_start: 0.50
+  cmin_end: 0.80
+  beta: 0.05
+  residual_floor: 0.02
+  ratio_epsilon: 1.0e-6
+  batch_mean_epsilon: 1.0e-8
+  weighted_loss_epsilon: 1.0e-8
+  detach_gate: true
+
+evaluation:
+  space_time_grid: [500, 260]
+  final_time_grid: 500
+  heatmap_grid: [501, 251]
+  line_grid: 500
+  line_times: [0.0625, 0.125, 0.1875, 0.25]
+  representative_seed: 7
+  representative_seed_rule: third_smallest_TRG_PINN_primary_error
+  line_statistic: pointwise_median_plus_or_minus_RMSE_to_exact
+  figure_inference_device: cpu
+  relative_error_epsilon: 1.0e-12
+
+diagnostics:
+  control_volumes: 64
+  control_volume_quadrature_x: 64
+  control_volume_quadrature_t: 64
+  control_volume_min_width: 0.15
+  control_volume_min_duration: 0.04
+  legacy_fv_nx: 2400
+  legacy_fv_cfl: 0.45
+  legacy_fv_used_for_reported_metrics: false
+
+artifact_policy:
+  reported_artifacts_read_only: true
+  fresh_runs_directory: runs/reproduction
+  exact_regeneration_from_frozen_checkpoints: true
+  bitwise_identical_fresh_retraining_across_platforms: false

@@ -1,0 +1,62 @@
+benchmark: burgers_2d
+equation: 2d_burgers
+public_method_name: TRG-PINN
+
+domain:
+  x: [-1.0, 1.0]
+  y: [-1.0, 1.0]
+  t: [0.0, 0.5]
+
+riemann:
+  u_left: 1.0
+  u_right: 0.0
+  theta_deg: 30.0
+  eta0: -0.25
+
+network:
+  hidden_layers: 6
+  hidden_width: 128
+  activation: tanh
+  trainable_parameters: 83201
+
+training:
+  warmup_iterations: 3000
+  continuation_iterations: 7000
+  total_iterations: 10000
+  lr_warmup: 8.0e-4
+  lr_continuation: 3.0e-4
+  optimizer: AdamW
+  weight_decay: 1.0e-2
+  gradient_clip_norm: 1.0
+  collocation_per_iteration: 16000
+  initial_points_per_iteration: 2500
+  boundary_points_per_iteration: 2500
+  loss_weights:
+    ic: 100.0
+    bc: 30.0
+    pde: 1.0
+
+trg:
+  implementation_revision: valid_mask_all_probe_bounds_v3
+  directions:
+    - [1.0, 0.0]
+    - [0.0, 1.0]
+    - [0.7071067811865476, 0.7071067811865476]
+    - [0.7071067811865476, -0.7071067811865476]
+  valid_mask: xm2, xp2, ym2, yp2 each satisfy lower and upper domain bounds
+  h_max_factor: 5.0
+  h_min_factor: 2.0
+  cmin_start: 0.50
+  cmin_end: 0.70
+  beta: 0.05
+  residual_floor: 0.02
+  trace_ratio_stabilizer: 1.0e-6
+  normalization_stabilizer: 1.0e-8
+
+evaluation:
+  primary_metric: space_time_rel_l2
+  reference_type: analytical_planar_entropy_shock
+  space_time_grid: [90, 90, 45]
+  final_time_grid: [180, 180]
+  representative_seed: 31415
+  seeds: [2026, 7, 42, 100, 31415]

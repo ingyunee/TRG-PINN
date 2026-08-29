@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the accompanying article."
+title: "Trace-Ratio-Gated Physics-Informed Neural Networks for Hyperbolic Conservation Laws with Discontinuous Solutions"
+type: software
+authors:
+  - family-names: "Kang"
+    given-names: "Ingyun"
+  - family-names: "Koo"
+    given-names: "Eunho"
+version: "1.0.0"

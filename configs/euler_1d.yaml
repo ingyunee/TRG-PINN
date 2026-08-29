@@ -1,0 +1,123 @@
+# Canonical public configuration for the reported 1D Euler Sod benchmark.
+schema_version: 1
+
+benchmark:
+  id: 1d_euler
+  equation: compressible_euler
+  problem: sod_shock_tube
+  spatial_dimension: 1
+  primary_metric: primitive_scaled_space_time_rel_l2
+  reference: analytical_sod_riemann_solution
+
+runtime:
+  device: auto
+  dtype: float32
+
+reported_environment:
+  python: "3.10.20"
+  pytorch: "2.0.1+cu117"
+  cuda: "11.7"
+  gpu: "NVIDIA GeForce RTX 3090"
+
+seeds: [2026, 7, 42, 100, 31415]
+
+problem:
+  x_min: -0.5
+  x_max: 0.5
+  t_min: 0.0
+  t_max: 0.2
+  discontinuity_x0: 0.0
+  gamma: 1.4
+  left_state: [1.0, 0.0, 1.0]       # [rho, u, p]
+  right_state: [0.125, 0.0, 0.1]
+  left_boundary_state: [1.0, 0.0, 1.0]
+  right_boundary_state: [0.125, 0.0, 0.1]
+
+network:
+  hidden_layers: 6
+  hidden_width: 128
+  activation: tanh
+  direct_output: [rho, u, p]
+  output_dimension: 3
+  density_floor: 1.0e-4
+  pressure_floor: 1.0e-4
+  positive_outputs: [rho, p]
+  positive_transform: softplus_plus_floor
+  trainable_parameters: 83331
+
+scaling:
+  primitive_state: [1.0, 1.1832159566199232, 1.0]
+  trace_state: [1.0, 1.1832159566199232, 1.0]
+  conservative_residual: [1.0, 1.1832159566199232, 3.2]
+
+training:
+  warmup_iterations: 4000
+  continuation_iterations: 6000
+  total_iterations: 10000
+  resample_collocation_each_iteration: true
+  paired_continuation_rng: true
+  validation_set: false
+  early_stopping: false
+  best_checkpoint_selection: false
+  optimizer:
+    name: AdamW
+    warmup_learning_rate: 8.0e-4
+    continuation_learning_rate: 3.0e-4
+    weight_decay: 1.0e-2
+  scheduler:
+    name: CosineAnnealingLR
+    warmup_eta_min_fraction: 0.05
+    continuation_eta_min_fraction: 0.03
+  gradient_clip_norm: 1.0
+
+sampling:
+  interior_points: 12000
+  initial_points: 1500
+  boundary_points: 1500
+  initial_sampling: balanced_left_right
+  boundary_sampling: balanced_left_right_reservoir_states
+
+loss:
+  initial_weight: 100.0
+  boundary_weight: 30.0
+  pde_weight: 1.0
+
+trg:
+  h0: 0.0091287092917527683
+  h_start: 0.04564354645876384
+  h_end: 0.018257418583505537
+  h_min_factor: 2.0
+  h_max_factor: 5.0
+  cmin_start: 0.50
+  cmin_end: 0.70
+  beta: 0.05
+  residual_floor: 0.02
+  trace_ratio_epsilon: 1.0e-6
+  trace_norm_epsilon: 1.0e-12
+  batch_mean_epsilon: 1.0e-8
+  weighted_loss_epsilon: 1.0e-8
+  relative_error_epsilon: 1.0e-12
+  detach_gate: true
+
+reported_evaluation:
+  space_time_nx: 700
+  space_time_nt: 301
+  final_time_nx: 700
+  representative_seed: 2026
+
+paper_figures:
+  line_times: [0.10, 0.15, 0.20]
+  line_grid_nx: 1600
+  line_statistic: pointwise_median
+  line_band: median_centered_pointwise_rmse_to_exact
+  heatmap_nx: 601
+  heatmap_nt: 251
+  field_source: representative_paired_seed
+
+reported_result:
+  pinn_mean: 0.10148806743397465
+  pinn_sample_std: 0.001272917307216475
+  trg_pinn_mean: 0.03675510104237778
+  trg_pinn_sample_std: 0.0041233212622225094
+  reduction_percent: 63.78382013600797
+  paired_wins: 5

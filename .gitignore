@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.DS_Store
+runs/
+dist/
+build/*_backup/
+build/step*_backup/
+build/step*_recovery/
+artifacts_external/
+*.tmp
+environment/reported_runtime.json
+environment/reported_pip_freeze.txt
+environment/reported_conda_explicit.txt
+environment/reported_conda_environment.yml

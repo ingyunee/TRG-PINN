@@ -1,0 +1,21 @@
+\begin{table*}[t]
+\centering
+\caption{Five-seed mean and sample standard deviation of the primary space--time error.}
+\label{tab:primary_comparison}
+\begin{tabular}{lccccccc}
+\toprule
+Method & 1D Burgers & 1D Euler & 1D SW & 2D Burgers & 2D Euler & 2D SW & Mean rank \\
+\midrule
+PINN & \shortstack{1.14e-01\\(1.63e-03)} & \shortstack{1.01e-01\\(1.27e-03)} & \shortstack{1.75e-02\\(2.95e-04)} & \shortstack{1.14e-01\\(8.27e-04)} & \shortstack{5.91e-02\\(8.96e-04)} & \shortstack{3.40e-02\\(6.11e-04)} & 4.50 \\
+AAF-PINN & \shortstack{\underline{1.13e-01}\\\underline{(8.58e-04)}} & \shortstack{1.03e-01\\(2.46e-03)} & \shortstack{1.73e-02\\(3.43e-04)} & \shortstack{1.13e-01\\(1.17e-03)} & \shortstack{5.90e-02\\(6.53e-04)} & \shortstack{3.34e-02\\(2.73e-04)} & 3.83 \\
+LRA-PINN & \shortstack{4.07e-01\\(1.48e-02)} & \shortstack{3.37e-01\\(4.47e-03)} & \shortstack{4.64e-02\\(2.29e-02)} & \shortstack{\textbf{1.66e-02}\\\textbf{(1.15e-03)}} & \shortstack{\textbf{2.05e-02}\\\textbf{(1.94e-03)}} & \shortstack{1.87e-01\\(8.23e-03)} & 7.00 \\
+SA-PINN & \shortstack{1.36e-01\\(4.60e-02)} & \shortstack{8.35e-02\\(1.04e-02)} & \shortstack{2.55e-02\\(5.18e-03)} & \shortstack{9.46e-02\\(7.13e-03)} & \shortstack{5.21e-02\\(4.40e-03)} & \shortstack{3.44e-02\\(2.72e-03)} & 5.00 \\
+RAD-PINN & \shortstack{1.32e-01\\(8.59e-03)} & \shortstack{1.48e-01\\(5.54e-03)} & \shortstack{2.15e-02\\(4.87e-03)} & \shortstack{1.30e-01\\(3.14e-03)} & \shortstack{6.54e-02\\(2.89e-02)} & \shortstack{4.47e-02\\(2.92e-03)} & 7.17 \\
+RAR-D-PINN & \shortstack{1.29e-01\\(2.44e-03)} & \shortstack{1.57e-01\\(9.94e-03)} & \shortstack{2.49e-02\\(1.01e-03)} & \shortstack{1.33e-01\\(2.44e-03)} & \shortstack{1.01e-01\\(1.97e-02)} & \shortstack{5.39e-02\\(6.16e-04)} & 8.50 \\
+gPINN-sub. & \shortstack{1.26e-01\\(9.26e-04)} & \shortstack{1.32e-01\\(1.83e-03)} & \shortstack{2.33e-02\\(1.65e-04)} & \shortstack{1.32e-01\\(1.55e-03)} & \shortstack{8.26e-02\\(1.29e-03)} & \shortstack{4.34e-02\\(3.88e-04)} & 7.00 \\
+cPINN & \shortstack{1.20e-01\\(3.51e-03)} & \shortstack{9.54e-02\\(1.03e-03)} & \shortstack{\underline{1.67e-02}\\\underline{(3.10e-04)}} & \shortstack{1.16e-01\\(1.01e-03)} & \shortstack{6.14e-02\\(6.02e-04)} & \shortstack{\underline{3.28e-02}\\\underline{(4.52e-04)}} & 4.17 \\
+XPINN & \shortstack{1.59e-01\\(1.58e-02)} & \shortstack{\underline{7.55e-02}\\\underline{(1.66e-03)}} & \shortstack{2.64e-02\\(8.74e-04)} & \shortstack{1.17e-01\\(1.40e-03)} & \shortstack{5.50e-02\\(5.11e-03)} & \shortstack{5.08e-02\\(1.65e-03)} & 6.50 \\
+TRG-PINN & \shortstack{\textbf{4.98e-02}\\\textbf{(3.10e-03)}} & \shortstack{\textbf{3.68e-02}\\\textbf{(4.12e-03)}} & \shortstack{\textbf{9.54e-03}\\\textbf{(3.54e-04)}} & \shortstack{\underline{4.72e-02}\\\underline{(1.49e-03)}} & \shortstack{\underline{2.62e-02}\\\underline{(4.50e-04)}} & \shortstack{\textbf{2.51e-02}\\\textbf{(5.22e-04)}} & 1.33 \\
+\bottomrule
+\end{tabular}
+\end{table*}

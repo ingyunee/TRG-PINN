@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-08-27T02:29:13.823114+00:00",
+  "benchmark": "1d_burgers",
+  "legacy_internal_method_label": "Ours",
+  "public_method_label": "TRG-PINN",
+  "reported_artifact_policy": "exact byte-for-byte copy; no metadata rewrite",
+  "training_executed": false
+}

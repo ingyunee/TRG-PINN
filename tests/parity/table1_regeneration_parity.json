@@ -1,0 +1,132 @@
+{
+  "benchmark_primary_provenance": "results/table1/benchmark_primary_provenance.csv",
+  "benchmarks": 6,
+  "checkpoint_extra_used_as_reporting_source": false,
+  "created_at_utc": "2026-08-29T03:33:52.302008+00:00",
+  "first_second": {
+    "1D Burgers": {
+      "first": "TRG-PINN",
+      "second": "AAF-PINN"
+    },
+    "1D Euler": {
+      "first": "TRG-PINN",
+      "second": "XPINN"
+    },
+    "1D SW": {
+      "first": "TRG-PINN",
+      "second": "cPINN"
+    },
+    "2D Burgers": {
+      "first": "LRA-PINN",
+      "second": "TRG-PINN"
+    },
+    "2D Euler": {
+      "first": "LRA-PINN",
+      "second": "TRG-PINN"
+    },
+    "2D SW": {
+      "first": "TRG-PINN",
+      "second": "cPINN"
+    }
+  },
+  "first_second_checks": 6,
+  "formatted_shape": [
+    10,
+    7
+  ],
+  "gpinn_public_helpers_reconstructed_and_disclosed": true,
+  "gpinn_saved_method_block_exact": true,
+  "historical_numeric_stat_checks": 24,
+  "historical_pre_valid_mask_table_used": false,
+  "historical_reduction_win_checks": 12,
+  "manuscript_rounded_mean_checks": 60,
+  "manuscript_rounded_std_checks": 60,
+  "max_historical_numeric_difference": 2.6290081223123707e-13,
+  "max_step7_summary_difference": 1.1102230246251565e-16,
+  "mean_rank_checks": 10,
+  "methods": 10,
+  "numeric_wide_shape": [
+    10,
+    13
+  ],
+  "output_hashes": {
+    "results/table1/pinn_trg_reductions.csv": "f43cc506f08d14fc9a0fbd9b6783a3ba6073829ca027dca751f7e5dfc6bda6ca",
+    "results/table1/table1_final.tex": "cd0d54bd7ac1f260432ae8b225ef826f436863ae805f3244624ddd65247fde7f",
+    "results/table1/table1_final_formatted.csv": "9b234bde0e6c19ca7e26d4ecdaf52023a4f9e0134458b6ea1ae4e25f3cf997c0",
+    "results/table1/table1_final_numeric.csv": "fe5395a07533067666562036cb80f83c0068aef9b42c2c86f38f516c0219ebce",
+    "results/table1/table1_final_ranks.csv": "bf2787adaac30c3cb52eedd901e174f5713c9f1604a7e394dce0bfcdda79dcb8",
+    "results/table1/table1_long.csv": "57aaaded7a1da33098dee4fd5522bc9c228f6a05d307b9f09226c0b3784f3e7a",
+    "results/table1_final.csv": "c7935b4e3c3c915808bd83f813c7dd855af6e7e7a71b980d4da32b25c0dcc7ed",
+    "scripts/reproduce_table1.py": "243a77a5430643859dd9d857407bcfec411c84dcec31dab19b1a3cbe20bd85d2"
+  },
+  "pinn_trg_reductions": [
+    {
+      "benchmark": "1D Burgers",
+      "paired_wins": 5,
+      "pinn_mean": 0.11400558930297008,
+      "reduction_percent": 56.34769903264194,
+      "trg_pinn_mean": 0.04976606296214268
+    },
+    {
+      "benchmark": "1D Euler",
+      "paired_wins": 5,
+      "pinn_mean": 0.10148806743397465,
+      "reduction_percent": 63.78382013600797,
+      "trg_pinn_mean": 0.03675510104237778
+    },
+    {
+      "benchmark": "1D SW",
+      "paired_wins": 5,
+      "pinn_mean": 0.017537765605780558,
+      "reduction_percent": 45.60244012325061,
+      "trg_pinn_mean": 0.00954011654644844
+    },
+    {
+      "benchmark": "2D Burgers",
+      "paired_wins": 5,
+      "pinn_mean": 0.11424213053239274,
+      "reduction_percent": 58.64316982836352,
+      "trg_pinn_mean": 0.04724692390874094
+    },
+    {
+      "benchmark": "2D Euler",
+      "paired_wins": 5,
+      "pinn_mean": 0.05912086954627014,
+      "reduction_percent": 55.74088198999197,
+      "trg_pinn_mean": 0.0261663754210266
+    },
+    {
+      "benchmark": "2D SW",
+      "paired_wins": 5,
+      "pinn_mean": 0.03402165960430202,
+      "reduction_percent": 26.339971700149423,
+      "trg_pinn_mean": 0.0250603640926077
+    }
+  ],
+  "public_implementation_status_checks": 6,
+  "rank_shape": [
+    10,
+    6
+  ],
+  "ranking_rule": "ascending rank of unrounded five-seed mean; average ranks for exact ties",
+  "reduction_checks": 6,
+  "reduction_range_percent": [
+    26.339971700149423,
+    63.78382013600797
+  ],
+  "reported_artifact_hashes_unchanged": true,
+  "schema_version": 1,
+  "seeds_per_cell": 5,
+  "source_master": "results/reported_metrics/all_metrics_final.csv",
+  "source_master_sha256": "5a2ac7457be1416ff0dec91b377ab3673e8fc830be6bc75f5feb3ca5f7aab511",
+  "source_rows": 300,
+  "stage": "8",
+  "status": "PASS",
+  "step7_baseline_summary_checks": 144,
+  "table_numeric_rows": 60,
+  "total_pinn_trg_paired_wins": 30,
+  "training_executed": false,
+  "trg_first_count": 4,
+  "trg_mean_rank": 1.3333333333333333,
+  "trg_second_count": 2
+}

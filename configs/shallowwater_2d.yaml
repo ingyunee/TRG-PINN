@@ -1,0 +1,100 @@
+benchmark: 2d_shallowwater
+public_method_name: TRG-PINN
+internal_artifact_label: Ours
+
+seeds: [2026, 7, 42, 100, 31415]
+
+domain:
+  x: [-1.0, 1.0]
+  y: [-1.0, 1.0]
+  t: [0.0, 0.2]
+
+problem:
+  type: circular_wet_bed_dam_break
+  gravity: 1.0
+  center: [0.0, 0.0]
+  radius: 0.35
+  inside_state: [2.0, 0.0, 0.0]
+  outside_state: [1.0, 0.0, 0.0]
+  boundary_state: [1.0, 0.0, 0.0]
+
+model:
+  input_variables: [x, y, t]
+  output_variables: [h, m, n]
+  hidden_layers: 6
+  width: 128
+  activation: tanh
+  h_floor: 1.0e-5
+  trainable_parameters: 83459
+
+training:
+  optimizer: AdamW
+  weight_decay: 1.0e-2
+  warmup_iterations: 3000
+  continuation_iterations: 7000
+  total_iterations: 10000
+  warmup_learning_rate: 8.0e-4
+  continuation_learning_rate: 3.0e-4
+  cosine_eta_min_fraction:
+    warmup: 0.05
+    continuation: 0.03
+  gradient_norm_limit: 1.0
+  validation_set: false
+  early_stopping: false
+  best_checkpoint_selection: false
+
+sampling_per_iteration:
+  interior: 20000
+  initial: 6000
+  boundary: 2500
+  balanced_initial_inside_outside: true
+
+loss_weights:
+  initial: 100.0
+  boundary: 30.0
+  pde: 1.0
+
+trace_ratio_gate:
+  projective_directions: 6
+  gate_tau: 1.0
+  h_max_factor: 5.0
+  h_min_factor: 2.0
+  cmin_start: 0.50
+  cmin_end: 0.70
+  beta: 0.05
+  residual_floor: 0.02
+  implementation_revision: valid_mask_all_probe_bounds_v1
+  valid_mask: all_plus_minus_2h_probe_endpoints_inside_domain
+
+state_scales:
+  h: 2.0
+  m: 2.8284271247461903
+  n: 2.8284271247461903
+
+evaluation:
+  primary_metric: state_scaled_space_time_rel_l2
+  final_metric: state_scaled_final_rel_l2
+  metric_space_time_grid: [90, 90, 41]
+  metric_final_grid: [220, 220]
+  representative_seed: 100
+  field_figure_policy: paired_representative_seed
+  line_profile_policy: five_seed_pointwise_median
+  heatmap_policy: five_seed_pointwise_median
+
+reference:
+  canonical_reporting:
+    type: finite_volume_1024x1024_order2
+    exact: false
+    fv_nxy: 1024
+    eval_nxy: 1024
+    eval_nt: 41
+    order: 2
+    cfl: 0.35
+    sha256: 9df6008a0562c9de764fe48c4653a682a99912fe95983f1faff9d4bbf759572c
+  historical_training_config_default:
+    fv_nxy: 512
+    used_in_training_loss: false
+    note: >
+      This legacy value is a reference-generation default in the original
+      training configuration. Final manuscript metrics and figures use the
+      canonical FV1024 reference above.

@@ -1,0 +1,72 @@
+benchmark: euler_2d
+equation: 2d_euler
+public_method_name: TRG-PINN
+
+domain:
+  x: [-1.0, 1.0]
+  y: [-1.0, 1.0]
+  t: [0.0, 0.2]
+
+rotated_sod:
+  x0: 0.0
+  y0: 0.0
+  theta_deg: 30.0
+  gamma: 1.4
+  left_primitive: [1.0, 0.0, 1.0]
+  right_primitive: [0.125, 0.0, 0.1]
+
+network:
+  input_dimension: 3
+  output_variables: [rho, u, v, p]
+  hidden_layers: 6
+  hidden_width: 128
+  activation: tanh
+  rho_floor: 1.0e-6
+  p_floor: 1.0e-8
+  trainable_parameters: 83588
+
+training:
+  warmup_iterations: 3000
+  continuation_iterations: 7000
+  total_iterations: 10000
+  lr_warmup: 8.0e-4
+  lr_continuation: 3.0e-4
+  optimizer: AdamW
+  gradient_clip_norm: 1.0
+  collocation_per_iteration: 20000
+  initial_points_per_iteration: 6000
+  boundary_points_per_iteration: 2500
+  loss_weights:
+    ic: 100.0
+    bc: 1.0
+    pde: 1.0
+
+trg:
+  implementation_revision: valid_mask_all_probe_bounds_v1
+  projective_direction_count: 6
+  valid_mask: xm2, xp2, ym2, yp2 each satisfy lower and upper domain bounds
+  gate_tau: 1.0
+  h_max_factor: 5.0
+  h_min_factor: 2.0
+  h_max: 7.071067811865476e-2
+  h_min: 2.8284271247461903e-2
+  cmin_start: 0.50
+  cmin_end: 0.70
+  beta: 0.05
+  residual_floor: 0.02
+  component_scales:
+    rho: 1.0
+    u: 1.0
+    p: 1.0
+
+evaluation:
+  primary_metric: primitive_scaled_space_time_rel_l2
+  final_metric: primitive_scaled_final_rel_l2
+  reference_type: analytical_rotated_sod_riemann_solution
+  reference_is_exact: true
+  space_time_grid: [220, 220, 41]
+  metric_space_time_grid: [90, 90, 41]
+  final_time_grid: [220, 220]
+  normal_line_points: 1600
+  representative_seed: 31415
+  seeds: [2026, 7, 42, 100, 31415]

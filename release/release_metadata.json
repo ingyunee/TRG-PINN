@@ -1,0 +1,25 @@
+{
+  "authors": [
+    {
+      "name": "Ingyun Kang",
+      "role": "first_author"
+    },
+    {
+      "name": "Eunho Koo",
+      "role": "corresponding_author"
+    }
+  ],
+  "checkpoint_extra_authoritative": false,
+  "github_owner": "ingyunee",
+  "github_repository_url": "PENDING_MANUAL_CREATION",
+  "github_upload_performed": false,
+  "gpinn_helper_reconstruction_disclosed": true,
+  "package_date": "2026-08-29",
+  "planned_repository_name": "TRG-PINN",
+  "planned_repository_visibility": "private",
+  "schema_version": 1,
+  "software_license": "PENDING_BEFORE_PUBLIC_RELEASE",
+  "software_title": "Trace-Ratio-Gated Physics-Informed Neural Networks for Hyperbolic Conservation Laws with Discontinuous Solutions",
+  "version": "1.0.0",
+  "zenodo_doi": "PENDING"
+}

@@ -1,0 +1,70 @@
+{
+  "schema_version": 2,
+  "created_at_utc": "2026-08-28T02:34:39.432448+00:00",
+  "benchmark": "2d_burgers",
+  "status": "PASS",
+  "implementation_revision": "valid_mask_all_probe_bounds_v3",
+  "public_source_v2_pass": true,
+  "public_source_audit": "<LOCAL_PATH_REDACTED>/PINN/paper/TRG-PINN/tests/parity/2d_burgers_public_source_v2.json",
+  "checkpoint_architecture_pass": true,
+  "checkpoint_count": 10,
+  "checkpoint_parameter_count": 83201,
+  "public_numeric_metrics_computed": 490,
+  "strict_frozen_metric_comparisons": 435,
+  "historical_pinn_mask_dependent_gate_diagnostics": 55,
+  "max_strict_metric_absolute_difference": 0.0,
+  "max_core_metric_absolute_difference": 0.0,
+  "max_historical_pinn_gate_absolute_difference": 0.2212677001953125,
+  "metric_devices": {
+    "PINN": [
+      "cuda:6"
+    ],
+    "TRG-PINN": [
+      "cuda:3"
+    ]
+  },
+  "historical_pinn_gate_diagnostic_file": "<LOCAL_PATH_REDACTED>/PINN/paper/TRG-PINN/tests/parity/2d_burgers_historical_pinn_gate_diagnostics.csv",
+  "manuscript_quantitative_audit_pass": true,
+  "manuscript_quantitative_claims_checked": 21,
+  "figure_provenance_fingerprint_pass": true,
+  "figure_device": "cuda:5",
+  "figure_float32_matmul_precision": "high",
+  "figure_fingerprint_max_absolute_difference": 4.172325134277344e-07,
+  "figure_provenance_candidate_report": "<LOCAL_PATH_REDACTED>/PINN/paper/TRG-PINN/tests/parity/2d_burgers_figure_provenance_candidates.csv",
+  "cache_parity_pass": true,
+  "cache_array_comparisons": 82,
+  "cache_exact_keys": 82,
+  "cache_tolerance_keys": 0,
+  "max_cache_absolute_difference": 0.0,
+  "max_prediction_absolute_difference": 0.0,
+  "max_derived_absolute_difference": 0.0,
+  "current_figure_rendering_count": 10,
+  "frozen_figure_preservation_count": 10,
+  "valid_mask_unit_test": {
+    "status": "PASS",
+    "definition": "xm2/xp2/ym2/yp2 each satisfy both lower and upper bounds"
+  },
+  "active_gate_unit_test": {
+    "gate_max": 0.9975273013114929,
+    "active_fraction_gt_0p5": 0.26446279883384705,
+    "minimum_residual_weight": 0.022423245012760162,
+    "valid_fraction": 1.0,
+    "status": "PASS"
+  },
+  "isolated_2plus2_smoke_test_pass": true,
+  "smoke_device": "cuda:3",
+  "reported_artifact_hashes_unchanged": true,
+  "full_manuscript_retraining": false,
+  "pinn_primary_mean": 0.11424213053239277,
+  "pinn_primary_sample_std": 0.0008273798925881363,
+  "trg_pinn_primary_mean": 0.04724692390874097,
+  "trg_pinn_primary_sample_std": 0.0014927576525233166,
+  "primary_reduction_percent": 58.643169828363504,
+  "primary_paired_wins": 5,
+  "final_paired_wins": 5,
+  "reference_type": "analytical_planar_entropy_shock",
+  "representative_seed": 31415,
+  "canonical_training_budget": "3000 + 7000 = 10000",
+  "legacy_pre_valid_mask_runs_used": false,
+  "final_table1_regeneration_deferred_to_step": 8
+}

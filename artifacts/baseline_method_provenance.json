@@ -1,0 +1,263 @@
+{
+  "artifact_manifest_rows": 1920,
+  "baseline_count": 8,
+  "baseline_scope": "eight_specialized_baselines",
+  "canonical_reported_metric_source": "metrics_final.json per successful run and results/reported_metrics/all_metrics_final.csv",
+  "checkpoint_binaries_copied_to_git": false,
+  "checkpoint_distribution_policy": "Serialized artifact SHA-256 values are stored in baseline_artifact_manifest.csv. Checkpoint binaries remain outside the Git-tracked metadata tree.",
+  "checkpoint_extra_audit_file": "tests/parity/baseline_checkpoint_extra_metric_audit.csv",
+  "checkpoint_extra_different_fields": 880,
+  "checkpoint_extra_exact_fields": 16865,
+  "checkpoint_extra_metrics_authoritative": false,
+  "checkpoint_extra_numeric_overlap_fields": 17745,
+  "checkpoint_extra_policy": "model_final.pt extra is retained as historical training-time evaluation metadata. It is audited separately and is not required to equal the later canonical metrics_final.json values.",
+  "final_adamw_state_policy": "Exact state identity is required when lbfgs_used=False. When LBFGS was used, model_final.pt is the authoritative final state and may differ from the AdamW-final intermediate checkpoint.",
+  "max_checkpoint_extra_absolute_difference": 0.017469574288299317,
+  "methods": [
+    {
+      "artifact_method": "AAF-PINN",
+      "canonical_rows": 30,
+      "category": "adaptive_activation",
+      "checkpoint_bytes": 20459300,
+      "equations": [
+        "1d_burgers",
+        "1d_euler",
+        "1d_shallowwater",
+        "2d_burgers",
+        "2d_euler",
+        "2d_shallowwater"
+      ],
+      "implementation_variant": "Global trainable activation slope used by the reported artifacts.",
+      "key": "aaf_pinn",
+      "method_folder": "aaf_pinn",
+      "parameter_count_max": 83589,
+      "parameter_count_min": 83074,
+      "public_name": "AAF-PINN",
+      "reported_success_runs": 30,
+      "reported_unavailable_runs": 0,
+      "seeds": [
+        2026,
+        7,
+        42,
+        100,
+        31415
+      ],
+      "single_network": true
+    },
+    {
+      "artifact_method": "LRA-PINN",
+      "canonical_rows": 30,
+      "category": "adaptive_loss_balancing",
+      "checkpoint_bytes": 20445460,
+      "equations": [
+        "1d_burgers",
+        "1d_euler",
+        "1d_shallowwater",
+        "2d_burgers",
+        "2d_euler",
+        "2d_shallowwater"
+      ],
+      "implementation_variant": "Gradient-statistics learning-rate annealing used by the reported artifacts.",
+      "key": "lra_pinn",
+      "method_folder": "lra_pinn",
+      "parameter_count_max": 83588,
+      "parameter_count_min": 83073,
+      "public_name": "LRA-PINN",
+      "reported_success_runs": 30,
+      "reported_unavailable_runs": 0,
+      "seeds": [
+        2026,
+        7,
+        42,
+        100,
+        31415
+      ],
+      "single_network": true
+    },
+    {
+      "artifact_method": "SA-PINN",
+      "canonical_rows": 30,
+      "category": "self_adaptive_weights",
+      "checkpoint_bytes": 20449300,
+      "equations": [
+        "1d_burgers",
+        "1d_euler",
+        "1d_shallowwater",
+        "2d_burgers",
+        "2d_euler",
+        "2d_shallowwater"
+      ],
+      "implementation_variant": "Trainable pointwise self-adaptive weights used by the reported artifacts.",
+      "key": "sa_pinn",
+      "method_folder": "sa_pinn",
+      "parameter_count_max": 83588,
+      "parameter_count_min": 83073,
+      "public_name": "SA-PINN",
+      "reported_success_runs": 30,
+      "reported_unavailable_runs": 0,
+      "seeds": [
+        2026,
+        7,
+        42,
+        100,
+        31415
+      ],
+      "single_network": true
+    },
+    {
+      "artifact_method": "RAD-PINN",
+      "canonical_rows": 30,
+      "category": "adaptive_sampling",
+      "checkpoint_bytes": 20440980,
+      "equations": [
+        "1d_burgers",
+        "1d_euler",
+        "1d_shallowwater",
+        "2d_burgers",
+        "2d_euler",
+        "2d_shallowwater"
+      ],
+      "implementation_variant": "Residual-based adaptive distribution sampling used by the reported artifacts.",
+      "key": "rad_pinn",
+      "method_folder": "rad_pinn",
+      "parameter_count_max": 83588,
+      "parameter_count_min": 83073,
+      "public_name": "RAD-PINN",
+      "reported_success_runs": 30,
+      "reported_unavailable_runs": 0,
+      "seeds": [
+        2026,
+        7,
+        42,
+        100,
+        31415
+      ],
+      "single_network": true
+    },
+    {
+      "artifact_method": "RAR-D-PINN",
+      "canonical_rows": 30,
+      "category": "adaptive_sampling",
+      "checkpoint_bytes": 20447380,
+      "equations": [
+        "1d_burgers",
+        "1d_euler",
+        "1d_shallowwater",
+        "2d_burgers",
+        "2d_euler",
+        "2d_shallowwater"
+      ],
+      "implementation_variant": "Residual-based adaptive refinement with distribution used by the reported artifacts.",
+      "key": "rar_d_pinn",
+      "method_folder": "rar_d_pinn",
+      "parameter_count_max": 83588,
+      "parameter_count_min": 83073,
+      "public_name": "RAR-D-PINN",
+      "reported_success_runs": 30,
+      "reported_unavailable_runs": 0,
+      "seeds": [
+        2026,
+        7,
+        42,
+        100,
+        31415
+      ],
+      "single_network": true
+    },
+    {
+      "artifact_method": "gPINN-subsampled",
+      "canonical_rows": 30,
+      "category": "residual_gradient",
+      "checkpoint_bytes": 20445460,
+      "equations": [
+        "1d_burgers",
+        "1d_euler",
+        "1d_shallowwater",
+        "2d_burgers",
+        "2d_euler",
+        "2d_shallowwater"
+      ],
+      "implementation_variant": "Gradient-enhanced PINN evaluated on the reported residual-gradient subset.",
+      "key": "gpinn_subsampled",
+      "method_folder": "gpinn_subsampled",
+      "parameter_count_max": 83588,
+      "parameter_count_min": 83073,
+      "public_name": "gPINN-sub.",
+      "reported_success_runs": 30,
+      "reported_unavailable_runs": 0,
+      "seeds": [
+        2026,
+        7,
+        42,
+        100,
+        31415
+      ],
+      "single_network": true
+    },
+    {
+      "artifact_method": "cPINN",
+      "canonical_rows": 30,
+      "category": "spatial_domain_decomposition",
+      "checkpoint_bytes": 61155040,
+      "equations": [
+        "1d_burgers",
+        "1d_euler",
+        "1d_shallowwater",
+        "2d_burgers",
+        "2d_euler",
+        "2d_shallowwater"
+      ],
+      "implementation_variant": "Conservative spatial domain decomposition used by the reported artifacts.",
+      "key": "cpinn",
+      "method_folder": "cpinn",
+      "parameter_count_max": 334356,
+      "parameter_count_min": 166148,
+      "public_name": "cPINN",
+      "reported_success_runs": 30,
+      "reported_unavailable_runs": 0,
+      "seeds": [
+        2026,
+        7,
+        42,
+        100,
+        31415
+      ],
+      "single_network": false
+    },
+    {
+      "artifact_method": "XPINN",
+      "canonical_rows": 30,
+      "category": "space_time_domain_decomposition",
+      "checkpoint_bytes": 81443700,
+      "equations": [
+        "1d_burgers",
+        "1d_euler",
+        "1d_shallowwater",
+        "2d_burgers",
+        "2d_euler",
+        "2d_shallowwater"
+      ],
+      "implementation_variant": "Extended space-time domain decomposition used by the reported artifacts.",
+      "key": "xpinn",
+      "method_folder": "xpinn",
+      "parameter_count_max": 334356,
+      "parameter_count_min": 332296,
+      "public_name": "XPINN",
+      "reported_success_runs": 30,
+      "reported_unavailable_runs": 0,
+      "seeds": [
+        2026,
+        7,
+        42,
+        100,
+        31415
+      ],
+      "single_network": false
+    }
+  ],
+  "reported_run_count": 240,
+  "reported_success_run_count": 240,
+  "reported_unavailable_run_count": 0,
+  "schema_version": 3,
+  "vanilla_pinn_location": "The vanilla PINN is already implemented and verified inside the six benchmark modules."
+}
