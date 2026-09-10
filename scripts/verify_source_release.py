@@ -1,10 +1,8 @@
 #!/usr/bin/env python
-"""Verify the private/source-only TRG-PINN package.
+"""Check source syntax, reporting metadata, and saved comparison tables.
 
-This command does not require the separately archived checkpoint, cache, or
-FV1024 reference binaries. It verifies the curated source tree, canonical
-metrics, comparison products, public Python syntax, CLI entry points, and
-private pre-submission metadata.
+This command does not train models or verify manuscript accuracy. Optional
+checkpoint/reference artifacts are checked separately by verify_artifacts.py.
 """
 
 from __future__ import annotations
@@ -12,7 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 import ast
 import json
-import shutil
+import os
 import subprocess
 import sys
 import tempfile
@@ -62,6 +60,30 @@ def run(command: list[str]) -> None:
         raise RuntimeError(f"Command failed: {command}")
 
 
+
+def iter_source_files(root: Path):
+    """Skip local outputs, environments, and optional external artifact trees."""
+    ignored_names = {".git", ".venv", "venv", ".conda", ".tox", "__pycache__",
+                     ".pytest_cache", ".mypy_cache", ".ipynb_checkpoints"}
+    ignored_roots = {"runs", "dist", "artifacts_external"}
+    ignored_paths = {"artifacts/reported", "results/raw"}
+    for directory, subdirs, files in os.walk(root):
+        relative = Path(directory).relative_to(root)
+        subdirs[:] = [
+            name for name in subdirs
+            if name not in ignored_names
+            and not (relative == Path(".") and name in ignored_roots)
+            and (relative / name).as_posix() not in ignored_paths
+        ]
+        for name in files:
+            path = Path(directory) / name
+            # Installed baseline binaries are optional, manifest-checked data.
+            if (path.suffix.lower() in BINARY_SUFFIXES
+                    and path.relative_to(root).parts[:2] == ("artifacts", "reported_baselines")):
+                continue
+            yield path
+
+
 def main() -> int:
     required = [
         "README.md",
@@ -76,17 +98,11 @@ def main() -> int:
         "results/reported_metrics/all_metrics_final.csv",
         "results/benchmark_comparison/benchmark_comparison_formatted.csv",
         "artifacts/manifests",
-        "release/release_metadata.json",
-        "release/PRIVATE_GITHUB_UPLOAD_GUIDE.md",
     ]
     for relative in required:
         path = REPO_ROOT / relative
         if not path.exists():
             raise FileNotFoundError(path)
-
-    # Private pre-submission package: no license or fabricated public URL yet.
-    if (REPO_ROOT / "LICENSE").exists():
-        raise AssertionError("Private package unexpectedly contains LICENSE")
 
     citation = yaml.safe_load(
         (REPO_ROOT / "CITATION.cff").read_text(encoding="utf-8")
@@ -100,22 +116,11 @@ def main() -> int:
     ]
     if author_pairs != [("Ingyun", "Kang"), ("Eunho", "Koo")]:
         raise AssertionError(author_pairs)
-    if "license" in citation:
-        raise AssertionError("Private package claims a finalized license")
-    if "repository-code" in citation:
-        raise AssertionError("Private package claims a repository URL")
-
-    metadata = json.loads(
-        (REPO_ROOT / "release" / "release_metadata.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    if metadata.get("planned_repository_visibility") != "private":
-        raise AssertionError(metadata)
-    if metadata.get("github_upload_performed") is not False:
-        raise AssertionError(metadata)
-    if metadata.get("software_license") != "PENDING_BEFORE_PUBLIC_RELEASE":
-        raise AssertionError(metadata)
+    # Release metadata records the original package preparation. Visibility
+    # and license selection are not tests of source correctness.
+    metadata_path = REPO_ROOT / "release" / "release_metadata.json"
+    if metadata_path.is_file():
+        json.loads(metadata_path.read_text(encoding="utf-8"))
 
     master = pd.read_csv(
         REPO_ROOT / "results" / "reported_metrics" / "all_metrics_final.csv",
@@ -185,17 +190,17 @@ def main() -> int:
     ):
         run([sys.executable, str(REPO_ROOT / "scripts" / script_name), "--help"])
 
+    source_files = list(iter_source_files(REPO_ROOT))
     binary_files = [
         path.relative_to(REPO_ROOT).as_posix()
-        for path in REPO_ROOT.rglob("*")
-        if path.is_file() and path.suffix.lower() in BINARY_SUFFIXES
+        for path in source_files if path.suffix.lower() in BINARY_SUFFIXES
     ]
     if binary_files:
-        raise AssertionError(f"External binaries entered source package: {binary_files[:10]}")
+        raise AssertionError(f"Unexpected binaries in source files: {binary_files[:10]}")
 
     violations = []
-    for path in REPO_ROOT.rglob("*"):
-        if not path.is_file() or path.suffix.lower() not in TEXT_SUFFIXES:
+    for path in source_files:
+        if path.suffix.lower() not in TEXT_SUFFIXES:
             continue
         text = path.read_text(encoding="utf-8", errors="replace")
         for token in PROHIBITED_TOKENS:
@@ -204,16 +209,18 @@ def main() -> int:
     if violations:
         raise AssertionError(violations[:20])
 
-    print("[OK] private/source package metadata : PASS")
+    print("[OK] source and citation metadata    : PASS")
     print("[OK] canonical master rows           : 300/300")
     print("[OK] canonical grid                  : 10 x 6 x 5")
     print("[OK] comparison matrix               : 10 x 7")
     print("[OK] comparison regeneration         : EXACT")
     print("[OK] public Python syntax            :", python_files)
     print("[OK] public CLI help                 : 5/5")
-    print("[OK] external binaries               : EXCLUDED")
+    print("[OK] source binary scan              : PASS (external artifacts excluded)")
     print("[OK] portable path scan              : PASS")
-    print("[INFO] license/repository URL         : PENDING BY DESIGN")
+    print("[INFO] runtime and accuracy tests      : NOT RUN by this command")
+    if not (REPO_ROOT / "LICENSE").is_file():
+        print("[INFO] software license                : not assigned; see docs/LICENSE_PENDING.md")
     return 0
 
 

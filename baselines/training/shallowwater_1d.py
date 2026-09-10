@@ -1,19 +1,9 @@
-# ============================================================
-# Paper-ready multi-seed Trace-Ratio Gated PINN
-# 1D shallow-water dam-break / Riemann problem
-#
-# Protocol:
-#   - shared vanilla PINN warm-up
-#   - paired vanilla continuation and trace-ratio gated continuation
-#   - same RNG state restored before both continuations
-#   - no validation set
-#   - no early stopping
-#   - no best-checkpoint selection
-#   - final checkpoint evaluation only
-#   - finite-volume solution is used only for evaluation / plotting
-#
-# Paste this whole file into a Jupyter cell, or run as a .py script.
-# ============================================================
+"""Specialized baselines for the 1D shallow-water Stoker benchmark.
+
+Training routines are retained from the reported implementation. The public
+baseline evaluation adapter uses the exact Stoker evaluator in trgpinn;
+legacy finite-volume utilities below are not used by that adapter.
+"""
 
 import os
 import json
@@ -51,6 +41,7 @@ class SWConfig:
     output_dir: str = "runs_shallow_water_trace_ratio_paper"
     experiment_name: str = "shallow_water_dambreak_trace_ratio_original_schedule"
     save_outputs: bool = True
+    smoke_test: bool = False
 
     # 1D shallow-water dam-break setup
     x_min: float = -1.0
@@ -1536,41 +1527,32 @@ def save_run_header(run_dir, equation_name, method_name, cfg, method_config):
 # ------------------------------------------------------------
 
 def evaluate_model_any(model, method_name: str, cfg, ref=None):
-    """
-    Exact reference 문제:
-        evaluate_model(model, method_name, cfg)
+    """Evaluate a baseline with the exact Stoker reference and joint metrics."""
+    from trgpinn.equations.shallowwater_1d import (
+        ShallowWater1DConfig,
+        evaluate_model as evaluate_exact_stoker,
+    )
 
-    FV reference 문제:
-        evaluate_model(model, method_name, ref, cfg)
-
-    둘 다 자동으로 처리.
-    """
-    if "evaluate_model" not in globals():
-        return {
-            "method": method_name,
-            "seed": int(getattr(cfg, "seed", -1)),
-            "status": "failed",
-            "evaluation_error": "evaluate_model is not defined.",
-        }
-
+    if ref is not None:
+        raise ValueError(
+            "1D shallow-water baselines use the exact Stoker solution; "
+            "do not supply a finite-volume reference."
+        )
+    evaluation_cfg = ShallowWater1DConfig.from_legacy_mapping(cfg_to_dict(cfg))
+    was_training = model.training
     try:
-        row = evaluate_model(model, method_name, cfg)
-    except TypeError:
-        row = evaluate_model(model, method_name, ref, cfg)
-
-    if isinstance(row, pd.Series):
-        row = row.to_dict()
-
-    if not isinstance(row, dict):
-        row = dict(row)
+        row = dict(evaluate_exact_stoker(model, method_name, evaluation_cfg))
+    finally:
+        model.train(was_training)
 
     row["method"] = method_name
-    row["seed"] = int(getattr(cfg, "seed", row.get("seed", -1)))
+    row["seed"] = int(getattr(cfg, "seed", -1))
     row["warmup_iters"] = int(getattr(cfg, "warmup_iters", 0))
     row["continuation_iters"] = int(getattr(cfg, "gated_iters", 0))
     row["adam_total_iters"] = row["warmup_iters"] + row["continuation_iters"]
+    row["smoke_test"] = bool(getattr(cfg, "smoke_test", False))
+    row["evaluation_mode"] = "exact_stoker"
     row["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
-
     return row
 
 
@@ -1579,23 +1561,7 @@ def evaluate_model_any(model, method_name: str, cfg, ref=None):
 # ------------------------------------------------------------
 
 def build_reference_if_needed(cfg):
-    # 1D shallow-water에서는 metric 함수가 Stoker 해를 좌표별로 직접 계산
-    if "stoker_exact_hq" in globals() and all(
-        hasattr(cfg, name)
-        for name in ("hL", "hR", "qL", "qR", "g_const", "x0")
-    ):
-        print("[reference] Using exact Stoker entropy solution (pointwise).")
-        return None
-
-    # 다른 방정식 notebook에 Cell B를 재사용하는 경우를 위한 fallback
-    if "reference_fv_solution" in globals():
-        print("[reference] Building 1D FV reference...")
-        return reference_fv_solution(cfg)
-
-    if "compute_fv_reference" in globals():
-        print("[reference] Building 2D FV reference...")
-        return compute_fv_reference(cfg)
-
+    """The Stoker benchmark is evaluated analytically; no FV tuple is needed."""
     return None
 
 # ------------------------------------------------------------

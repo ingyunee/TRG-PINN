@@ -65,6 +65,7 @@ class ShallowWater2DConfig:
     output_dir: str = "runs_shallow_water2d_trace_ratio_paper"
     experiment_name: str = "shallow_water2d_circular_dambreak_ring_trace_ratio_locked"
     save_outputs: bool = True
+    smoke_test: bool = False
 
     # Circular wet-bed dam-break benchmark
     x_min: float = -1.0
@@ -130,7 +131,8 @@ class ShallowWater2DConfig:
     radial_angles: int = 16        # front metric angles
     gate_eval_nxy: int = 180
 
-    # Finite-volume reference. Use 512 for the paper run; verify with a finer grid.
+    # Legacy reference-generation defaults. The public full-run CLI requires
+    # the separately supplied, hash-verified FV1024 reference.
     fv_nxy: int = 512
     fv_cfl: float = 0.35
     fv_order: int = 2
@@ -1763,41 +1765,59 @@ def save_run_header(run_dir, equation_name, method_name, cfg, method_config):
 # ------------------------------------------------------------
 
 def evaluate_model_any(model, method_name: str, cfg, ref=None):
-    """
-    Exact reference 문제:
-        evaluate_model(model, method_name, cfg)
-
-    FV reference 문제:
-        evaluate_model(model, method_name, ref, cfg)
-
-    둘 다 자동으로 처리.
-    """
-    if "evaluate_model" not in globals():
-        return {
-            "method": method_name,
-            "seed": int(getattr(cfg, "seed", -1)),
-            "status": "failed",
-            "evaluation_error": "evaluate_model is not defined.",
-        }
-
-    try:
-        row = evaluate_model(model, method_name, cfg)
-    except TypeError:
-        row = evaluate_model(model, method_name, ref, cfg)
-
-    if isinstance(row, pd.Series):
-        row = row.to_dict()
-
-    if not isinstance(row, dict):
-        row = dict(row)
+    """Separate reference-free smoke diagnostics from full FV evaluation."""
+    is_smoke = bool(getattr(cfg, "smoke_test", False))
+    if is_smoke:
+        if ref is not None:
+            raise ValueError("Reference arrays are not used in smoke tests.")
+        parameter = next(model.parameters())
+        # Include the interior, boundaries, initial time, and final time.
+        x = torch.linspace(cfg.x_min, cfg.x_max, 4,
+                           device=parameter.device, dtype=parameter.dtype)
+        y = torch.linspace(cfg.y_min, cfg.y_max, 4,
+                           device=parameter.device, dtype=parameter.dtype)
+        t = torch.linspace(cfg.t_min, cfg.t_max, 3,
+                           device=parameter.device, dtype=parameter.dtype)
+        X, Y, T = torch.meshgrid(x, y, t, indexing="ij")
+        coordinates = torch.stack((X.flatten(), Y.flatten(), T.flatten()), dim=1)
+        was_training = model.training
+        try:
+            model.eval()
+            with torch.no_grad():
+                state = model(coordinates)
+            if state.shape != (coordinates.shape[0], 3):
+                raise ValueError(f"Unexpected prediction shape: {tuple(state.shape)}")
+            if not bool(torch.isfinite(state).all()):
+                raise FloatingPointError("Non-finite smoke-test prediction.")
+            row = {
+                "model": method_name,
+                "evaluation_mode": "prediction_only_no_reference",
+                "reference_evaluation_skipped": True,
+                "reference_type": None,
+                "prediction_finite": True,
+                "prediction_points": int(coordinates.shape[0]),
+                "h_min": float(state[:, 0].min().detach().cpu()),
+                "h_max": float(state[:, 0].max().detach().cpu()),
+            }
+        finally:
+            model.train(was_training)
+    else:
+        if ref is None:
+            raise ValueError(
+                "Full 2D shallow-water evaluation requires the FV1024 reference. "
+                "Use --reference-path in scripts/train_baseline.py."
+            )
+        row = dict(evaluate_model(model, method_name, ref, cfg))
+        row["evaluation_mode"] = "finite_volume_reference"
+        row["reference_evaluation_skipped"] = False
 
     row["method"] = method_name
-    row["seed"] = int(getattr(cfg, "seed", row.get("seed", -1)))
+    row["seed"] = int(getattr(cfg, "seed", -1))
     row["warmup_iters"] = int(getattr(cfg, "warmup_iters", 0))
     row["continuation_iters"] = int(getattr(cfg, "gated_iters", 0))
     row["adam_total_iters"] = row["warmup_iters"] + row["continuation_iters"]
+    row["smoke_test"] = is_smoke
     row["timestamp"] = time.strftime("%Y-%m-%d %H:%M:%S")
-
     return row
 
 

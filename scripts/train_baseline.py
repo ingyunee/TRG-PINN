@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Run one specialized baseline with the reported training adapter."""
+"""Train one specialized baseline; keep smoke runs separate from full runs."""
 
 from __future__ import annotations
 
@@ -14,6 +14,9 @@ import numpy as np
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+SRC_ROOT = REPO_ROOT / "src"
+if str(SRC_ROOT) not in sys.path:
+    sys.path.insert(0, str(SRC_ROOT))
 
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(
@@ -85,6 +88,8 @@ def parse_args():
     parser.add_argument(
         "--smoke-test",
         action="store_true",
+        help=("Run a reduced execution check under OUTPUT_ROOT/smoke_tests. "
+              "2D shallow-water smoke runs omit reference-based errors."),
     )
     parser.add_argument(
         "--overwrite",
@@ -144,7 +149,7 @@ def load_reference(
     if path is None:
         raise ValueError(
             "Full shallowwater_2d baseline evaluation requires "
-            "--reference-path. Smoke tests should use burgers_1d."
+            "--reference-path pointing to the canonical FV1024 file."
         )
 
     path = path.expanduser().resolve()
@@ -184,11 +189,20 @@ def load_reference(
 def main() -> int:
     args = parse_args()
 
+    if args.smoke_test and args.reference_path is not None:
+        raise ValueError(
+            "--reference-path is not used in smoke tests. Remove it, or "
+            "omit --smoke-test for a full FV1024 evaluation."
+        )
+
     output_root = (
         args.output_root
         .expanduser()
         .resolve()
     )
+
+    if args.smoke_test:
+        output_root = output_root / "smoke_tests"
 
     protected_roots = (
         (REPO_ROOT / "artifacts").resolve(),
@@ -226,6 +240,8 @@ def main() -> int:
 
     if args.smoke_test:
         cfg = apply_smoke_settings(cfg)
+    if hasattr(cfg, "smoke_test"):
+        cfg.smoke_test = bool(args.smoke_test)
 
     reference = (
         None
