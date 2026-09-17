@@ -23,7 +23,7 @@ External archives must preserve manifest-relative paths and SHA-256 digests.
 
 ## Integrity checks
 
-Source-only package:
+For the Git-tracked source package:
 
 ```bash
 python scripts/verify_source_release.py
