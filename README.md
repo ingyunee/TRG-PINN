@@ -70,7 +70,7 @@ python scripts/train_baseline.py --benchmark shallowwater_2d --method aaf_pinn -
 
 Replace `/path/to/fv1024.npz` with the local reference path. The file is checked against its recorded SHA-256 digest. A 2D shallow-water smoke test needs no reference, but reports prediction checks rather than reference-based errors.
 
-Reported checkpoints, binary prediction caches, and the FV1024 reference array are **not included** in this source package. Checkpoint-based reevaluation and figure regeneration require those files. Their paths and hashes are documented in [`artifacts/manifests/`](artifacts/manifests/) and [`docs/ARTIFACTS.md`](docs/ARTIFACTS.md).
+The 300 reported final checkpoints and the FV1024 reference are available in [release v1.0.0](https://github.com/ingyunee/TRG-PINN/releases/tag/v1.0.0). Download the artifact-setup addendum from the same release and extract it into the repository root before checkpoint-based reevaluation. The addendum supplies the original per-run configurations and a hash-verifying installation helper; follow the release notes or `docs/RELEASE_ARTIFACT_SETUP.md` inside the addendum. Intermediate checkpoints and historical binary prediction caches are not included.
 
 ## Verification
 
