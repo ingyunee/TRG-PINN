@@ -1,17 +1,11 @@
 # External artifact policy
 
-The private GitHub source ZIP excludes large binary artifacts.
+Large binary artifacts are distributed separately from the Git-tracked source.
 
-External materials include reported checkpoint binaries, binary NumPy caches,
-specialized-baseline checkpoints, and the FV1024 2D shallow-water reference.
+The reported final checkpoints and the FV1024 reference used for the two-dimensional shallow-water benchmark are available as assets of GitHub release v1.0.0:
 
-These can remain local until the authors decide how to provide reviewer or
-public access. When an archival release is prepared, preserve the
-manifest-relative paths and SHA-256 digests.
+https://github.com/ingyunee/TRG-PINN/releases/tag/v1.0.0
 
-Canonical reporting remains:
+Checkpoint-based reevaluation requires the artifact-setup addendum provided with the same release. The addendum supplies the original paired-run configuration files and installs the final checkpoints at the paths expected by the public evaluation scripts.
 
-```text
-results/reported_metrics/all_metrics_final.csv
-seed-level metrics_final.json
-```
+Intermediate checkpoints and historical binary prediction caches are not included. Artifact integrity is tracked using SHA-256 manifests.
