@@ -24,8 +24,3 @@ inside `model_final.pt` under `extra` are retained as historical training-time
 metadata and are audited separately; they are not required to equal later
 canonical re-evaluations.
 
-STEP 7A records frozen-artifact provenance and sanitized metadata without
-copying checkpoint binaries into the Git-tracked tree. Canonical rows that
-represent an unavailable or failed baseline run are preserved as such rather
-than converted into synthetic results. Specialized executable training adapters
-are handled separately in STEP 7B.
