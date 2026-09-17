@@ -11,15 +11,14 @@
   ],
   "checkpoint_extra_authoritative": false,
   "github_owner": "ingyunee",
-  "github_repository_url": "PENDING_MANUAL_CREATION",
-  "github_upload_performed": false,
+  "github_repository_url": "https://github.com/ingyunee/TRG-PINN",
+  "github_upload_performed": true,
   "gpinn_helper_reconstruction_disclosed": true,
   "package_date": "2026-08-29",
-  "planned_repository_name": "TRG-PINN",
-  "planned_repository_visibility": "private",
+  "repository_visibility": "public",
   "schema_version": 1,
-  "software_license": "PENDING_BEFORE_PUBLIC_RELEASE",
+  "software_license": "not_assigned",
   "software_title": "Trace-Ratio-Gated Physics-Informed Neural Networks for Hyperbolic Conservation Laws with Discontinuous Solutions",
   "version": "1.0.0",
-  "zenodo_doi": "PENDING"
+  "zenodo_doi": null
 }
