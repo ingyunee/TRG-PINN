@@ -57,7 +57,6 @@ models. Local runs and installed external artifacts are outside its source scan;
 use `verify_artifacts.py` for available reported artifacts and
 `test_shallowwater_runtime.py` for the shallow-water execution paths.
 
-Existing manifests, parity reports, and `release/release_metadata.json` document
-the original package preparation. They are historical records, not a statement
-that later source changes have been independently retrained or that a repository
-has a particular current visibility or license.
+Existing manifests and parity reports document the original package preparation.
+They are historical records and do not imply that later documentation changes
+were independently retrained.
